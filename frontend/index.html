@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RentEase – Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <h1>RentEase</h1>
+        <div class="subtitle">Local Rental Finder</div>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Login</h2>
+      <div class="login-grid">
+        <div class="login-main">
+          <div class="tabs">
+            <button class="tab active" data-tab="user">User</button>
+            <button class="tab" data-tab="admin">Admin</button>
+          </div>
+
+          <div id="pane-user" class="pane active">
+            <form id="formUserLogin" class="col">
+              <label>Email
+                <input name="email" type="email" required placeholder="user1@rentease.local" />
+              </label>
+              <label>Password
+                <div class="input-group">
+                  <input id="userPassword" name="password" type="password" required placeholder="password123" />
+                  <button type="button" id="toggleUserPwd" class="icon-btn" aria-label="Show password">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                  </button>
+                </div>
+              </label>
+              <button class="btn btn-primary btn-block" type="submit">Login</button>
+              <a class="btn btn-primary btn-subtle btn-block mb-8" href="./register.html">Create an account</a>
+            </form>
+          </div>
+
+          <div id="pane-admin" class="pane">
+            <form id="formAdminLogin" class="col">
+              <label>Admin Email
+                <input name="email" type="email" required placeholder="admin@rentease.local" />
+              </label>
+              <label>Password
+                <div class="input-group">
+                  <input id="adminPassword" name="password" type="password" required placeholder="admin123" />
+                  <button type="button" id="toggleAdminPwd" class="icon-btn" aria-label="Show password">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                  </button>
+                </div>
+              </label>
+              <button class="btn btn-primary btn-block" type="submit">Login</button>
+              
+            </form>
+          </div>
+        </div>
+        <div class="login-art" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- Notification Modal -->
+    <div id="notifyModal" class="modal hidden">
+      <div class="modal-content">
+        <div id="notifyText" style="margin-bottom:12px"></div>
+        <div class="modal-actions">
+          <button id="notifyOk" class="btn btn-primary">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="./scripts/config.js"></script>
+<script src="./scripts/api.js"></script>
+<script src="./scripts/login.js"></script>
+</body>
+</html>

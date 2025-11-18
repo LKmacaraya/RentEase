@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RentEase – Register</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <h1>RentEase</h1>
+        <div class="subtitle">Local Rental Finder</div>
+      </div>
+      <a class="btn btn-ghost" href="./index.html">Back to Home</a>
+    </header>
+
+    <section class="card">
+      <h2>Register</h2>
+      <form id="formRegister" class="col">
+        <label>Full Name
+          <input name="name" required placeholder="Juan Dela Cruz" />
+        </label>
+        <label>Email
+          <input name="email" type="email" required placeholder="you@example.com" />
+        </label>
+        <label>Password
+          <input name="password" type="password" required />
+        </label>
+        <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+        
+      </form>
+    </section>
+  </div>
+
+  <script src="./scripts/config.js"></script>
+  <script src="./scripts/api.js"></script>
+  <script src="./scripts/register.js"></script>
+</body>
+</html>

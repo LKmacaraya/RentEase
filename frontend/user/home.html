@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RentEase – Listings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../styles/main.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <h1>RentEase</h1>
+        <div class="subtitle">Local Rental Finder</div>
+      </div>
+
+  <!-- Notification Modal -->
+  <div id="notifyModal" class="modal hidden">
+    <div class="modal-content">
+      <div id="notifyText" style="margin-bottom:12px"></div>
+      <div class="modal-actions">
+        <button id="notifyOk" class="btn btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Details Modal (read-only) -->
+  <div id="viewModal" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="vTitle">Listing Details</h3>
+      <img id="vPhoto" alt="Listing photo" style="width:100%;max-height:260px;object-fit:cover;border-radius:12px;border:1px solid var(--border);margin:8px 0" />
+      <div id="vMeta" class="meta"></div>
+      <div id="vDesc" style="margin:8px 0 12px 0"></div>
+      <div id="vAddr" class="meta"></div>
+      <div id="vLinks" class="modal-actions"></div>
+      <div class="modal-actions">
+        <button id="btnCloseView" class="btn btn-primary">Close</button>
+      </div>
+    </div>
+  </div>
+      <div class="actions">
+        <span id="apiStatus" class="status-badge">Checking…</span>
+        <button id="btnLogout" class="btn btn-danger">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <section id="searchView" class="card">
+      <h2>Search & Filter</h2>
+      <div class="row">
+        <label>Location
+          <input id="fLocation" placeholder="e.g. Talamban" />
+        </label>
+        <label>Bedrooms
+          <input id="fBedrooms" type="number" min="0" step="1" />
+        </label>
+      </div>
+      <div class="row">
+        <label>Min Price
+          <input id="fMinPrice" type="number" min="0" step="1" />
+        </label>
+        <label>Max Price
+          <input id="fMaxPrice" type="number" min="0" step="1" />
+        </label>
+      </div>
+      <div class="row">
+        <label>Status
+          <select id="fStatus">
+            <option value="">Any</option>
+            <option value="available">Available</option>
+            <option value="rented">Rented</option>
+          </select>
+        </label>
+        <label>Search
+          <input id="fQuery" placeholder="title, description, contact..." />
+        </label>
+      </div>
+      <div class="row">
+        <button id="btnApply" class="btn btn-primary">Apply Filters</button>
+        <button id="btnClear" class="btn btn-ghost">Clear</button>
+      </div>
+    </section>
+
+    <section id="listingsView" class="card">
+      <h2>Listings</h2>
+      <div id="list"></div>
+      <div id="empty" class="meta">No listings yet.</div>
+    </section>
+  </div>
+
+  <!-- Modal -->
+  <div id="msgModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Send a Message</h3>
+      <textarea id="msgText" placeholder="Type your message..."></textarea>
+      <div class="modal-actions">
+        <button id="btnSendMsg" class="btn btn-primary">Send Message</button>
+        <a id="btnCallOwner" class="btn btn-ghost" href="#">Call Owner</a>
+        <button id="btnCancelMsg" class="btn btn-danger">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+<script src="../scripts/config.js"></script>
+<script src="../scripts/api.js"></script>
+<script src="../scripts/user.js"></script>
+</body>
+</html>

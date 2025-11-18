@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RentEase – Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <h1>RentEase</h1>
+        <div class="subtitle">Admin Dashboard</div>
+      </div>
+
+  <!-- Confirm Delete Modal -->
+  <div id="confirmModal" class="modal hidden">
+    <div class="modal-content">
+      <div id="confirmText" style="margin-bottom:12px">Are you sure?</div>
+      <div class="modal-actions">
+        <button id="confirmCancel" class="btn btn-ghost">Cancel</button>
+        <button id="confirmOk" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+      <div class="actions">
+        <span id="apiStatus" class="status-badge">Checking…</span>
+        <button id="btnPost" class="btn btn-ghost">Post a Rental</button>
+        <button id="btnManage" class="btn btn-ghost">Manage Listings</button>
+        <button id="btnLogout" class="btn btn-danger">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Post a Rental Section -->
+    <section id="postView" class="card" style="display:none">
+      <h2>Post a Rental</h2>
+      <form id="formCreate">
+        <div class="row">
+          <label>Title
+            <input name="title" required placeholder="Cozy 1BR near campus" />
+          </label>
+          <label>Price (₱/month)
+            <input name="price" type="number" min="0" step="1" required />
+          </label>
+        </div>
+        <div class="row">
+          <label>Location
+            <input name="location" placeholder="Barangay / Street" />
+          </label>
+          <label>Bedrooms
+            <input name="bedrooms" type="number" min="0" step="1" value="1" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Size (sqm)
+            <input name="sizeSqm" type="number" min="0" step="1" value="25" />
+          </label>
+          <label>Photo
+            <input id="photoFile" name="photoFile" type="file" accept="image/*" />
+          </label>
+        </div>
+        <input type="hidden" name="lat" id="latCreate" />
+        <input type="hidden" name="lng" id="lngCreate" />
+        <div class="map-label">Select location
+          <div class="map-search">
+            <input id="mapCreateSearch" placeholder="Search location..." />
+            <button type="button" id="mapCreateFind" class="btn btn-ghost">Search</button>
+          </div>
+          <div id="mapCreate" class="map"></div>
+        </div>
+        <label>Description
+          <textarea name="description" placeholder="Short description..."></textarea>
+        </label>
+        <div class="row">
+          <label>Contact Name
+            <input name="contactName" required />
+          </label>
+          <label>Contact Phone
+            <input name="contactPhone" placeholder="09xx..." />
+          </label>
+        </div>
+        <div class="row">
+          <button class="btn btn-primary" type="submit">Add Listing</button>
+          <button class="btn btn-ghost" type="reset">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Manage Listings Section -->
+    <section id="listingsView" class="card" style="display:block">
+      <h2>Manage Listings</h2>
+      <div class="map-search" style="margin: 8px 0 14px 0">
+        <input id="adminSearch" placeholder="Search listings (title, city, description)…" />
+        <button type="button" id="adminSearchClear" class="btn btn-ghost">Clear</button>
+      </div>
+      <div id="list"></div>
+      <div id="empty" class="meta">No listings yet.</div>
+    </section>
+  </div>
+
+  <!-- Edit Listing Modal -->
+  <div id="editModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Edit Listing</h3>
+      <form id="editForm">
+        <input type="hidden" id="eId" />
+        <div class="row">
+          <label>Title
+            <input id="eTitle" required />
+          </label>
+          <label>Price (₱/month)
+            <input id="ePrice" type="number" min="0" step="1" required />
+          </label>
+        </div>
+        <div class="row">
+          <label>Location
+            <input id="eLocation" />
+          </label>
+          <label>Bedrooms
+            <input id="eBedrooms" type="number" min="0" step="1" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Baths
+            <input id="eBaths" type="number" min="0" step="1" />
+          </label>
+          <label>Status
+            <select id="eStatus">
+              <option value="available">Available</option>
+              <option value="rented">Rented</option>
+            </select>
+          </label>
+        </div>
+        <label>Address
+          <input id="eAddress" />
+        </label>
+        <input type="hidden" id="eLat" />
+        <input type="hidden" id="eLng" />
+        <div class="map-label">Select location
+          <div class="map-search">
+            <input id="mapEditSearch" placeholder="Search location..." />
+            <button type="button" id="mapEditFind" class="btn btn-ghost">Search</button>
+          </div>
+          <div id="mapEdit" class="map"></div>
+        </div>
+        <label>Description
+          <textarea id="eDescription" placeholder="Short description..."></textarea>
+        </label>
+        <label>Replace Photo (optional)
+          <input id="ePhotoFile" type="file" accept="image/*" />
+        </label>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="button" id="btnCancelEdit" class="btn btn-danger">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script src="../scripts/config.js"></script>
+<script src="../scripts/api.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="../scripts/admin.js"></script>
+</body>
+</html>
