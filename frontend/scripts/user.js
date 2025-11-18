@@ -27,7 +27,7 @@ function render(list){
     const pill=document.createElement("span");pill.className=`badge pill ${status}`;pill.textContent=status==='rented'? 'Rented':'Available';card.appendChild(pill);
     if(it.description){const d=document.createElement("div");d.textContent=it.description;body.appendChild(d);} 
     const act=document.createElement("div");act.className="actions-inline";
-    const msg=document.createElement("button");msg.className="btn btn-primary";msg.textContent="Message Owner";msg.onclick=()=>openModal("");act.appendChild(msg);
+    const msg=document.createElement("button");msg.className="btn btn-primary";msg.textContent="Message Owner";msg.onclick=()=>openPrivateChat(it.id, it.owner_id);act.appendChild(msg);
     body.appendChild(act);card.appendChild(body);holder.appendChild(card);
   });
 }
@@ -45,11 +45,96 @@ document.querySelector("#btnClear").addEventListener("click",()=>{["#fLocation",
 document.querySelector("#btnLogout").addEventListener("click",()=>{localStorage.removeItem(DB.kSession);window.location.href="../index.html";});
 applyFilters();
 
-// modal logic
 const modal=document.querySelector("#msgModal"),msgBox=document.querySelector("#msgText"),btnSend=document.querySelector("#btnSendMsg"),btnCall=document.querySelector("#btnCallOwner"),btnCancel=document.querySelector("#btnCancelMsg");
 function openModal(phone){modal.classList.remove("hidden");msgBox.value="";btnCall.href="tel:"+phone;}
 btnSend.onclick=()=>{if(msgBox.value.trim()===""){notify("Please enter a message.");return;}notify("Message sent successfully!");modal.classList.add("hidden");};
 btnCancel.onclick=()=>modal.classList.add("hidden");
+
+const pubList=document.getElementById('pubChatList');
+const pubInput=document.getElementById('pubChatInput');
+const pubSend=document.getElementById('pubChatSend');
+let pubAfterId=0;let pubTimer=null;
+const stickers=['👍','😊','❤️','😢','😮'];
+// augment input row with buttons and sticker picker
+const inputRow=pubSend?.parentElement; let fileBtn=null, fileInp=null, stkBtn=null, stkPicker=null; let stkOpen=false;
+if(inputRow){
+  fileBtn=document.createElement('button'); fileBtn.type='button'; fileBtn.className='btn-icon'; fileBtn.textContent='Image';
+  fileInp=document.createElement('input'); fileInp.type='file'; fileInp.accept='image/*'; fileInp.style.display='none';
+  stkBtn=document.createElement('button'); stkBtn.type='button'; stkBtn.className='btn-icon'; stkBtn.textContent='Stickers';
+  stkPicker=document.createElement('div'); stkPicker.className='sticker-picker'; stkPicker.style.display='none';
+  const grid=document.createElement('div'); grid.className='sticker-grid';
+  stickers.forEach(em=>{ const btn=document.createElement('button'); btn.type='button'; btn.textContent=em; btn.onclick=async()=>{ try{ await window.API.chat.public.send(em,'sticker'); hideSticker(); }catch{ notify('Failed to send'); } }; grid.appendChild(btn); });
+  stkPicker.appendChild(grid);
+  inputRow.parentElement.appendChild(stkPicker);
+  // Order: input | Send | Stickers | Image
+  inputRow.appendChild(pubSend);
+  inputRow.appendChild(stkBtn);
+  inputRow.appendChild(fileBtn);
+  inputRow.appendChild(fileInp);
+  fileBtn.onclick=()=>fileInp.click();
+  function hideSticker(){ stkOpen=false; stkPicker.style.display='none'; }
+  stkBtn.onclick=()=>{ stkOpen=!stkOpen; stkPicker.style.display= stkOpen?'block':'none'; };
+  fileInp.onchange=async(e)=>{
+    const f=e.target.files && e.target.files[0]; if(!f) return; if(f.size>4.5*1024*1024){ notify('Image is too large. Max 4.5MB'); return; }
+    try{
+      const b64=await new Promise(res=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.readAsDataURL(f); });
+      await window.API.chat.public.send(String(b64),'image'); fileInp.value='';
+    }catch{ notify('Failed to send'); }
+  };
+}
+function renderBubble(m){
+  const meId=DB.session()?.user?.id; const isMe=m.sender_id===meId;
+  const wrap=document.createElement('div'); wrap.className='chat-msg'+(isMe?' me':'');
+  const bubble=document.createElement('div'); bubble.className='msg-bubble';
+  if(m.deleted_at){ const t=document.createElement('div'); t.className='msg-text'; t.textContent='(message deleted)'; bubble.appendChild(t); }
+  else if(m.kind==='image'||(/^data:image\//.test(m.content))){ const img=document.createElement('img'); img.className='msg-image'; img.src=m.content; bubble.appendChild(img); }
+  else if(m.kind==='sticker'){
+    if(/^https?:\/\//.test(m.content)||/^data:image\//.test(m.content)){
+      const img=document.createElement('img'); img.className='msg-image'; img.src=m.content; bubble.appendChild(img);
+    }else{ const t=document.createElement('div'); t.className='msg-text'; t.style.fontSize='24px'; t.textContent=m.content; bubble.appendChild(t); }
+  }
+  else { const t=document.createElement('div'); t.className='msg-text'; t.textContent=m.content; bubble.appendChild(t); }
+  const meta=document.createElement('div'); meta.className='msg-meta'; meta.textContent=(m.sender_name||('User '+m.sender_id))+(m.edited_at?' • edited':''); bubble.appendChild(meta);
+  const actions=document.createElement('div'); actions.className='msg-actions';
+  if(isMe){
+    const btnE=document.createElement('button'); btnE.className='btn-icon'; btnE.textContent='Edit'; btnE.onclick=async()=>{ const v=prompt('Edit message', m.content||''); if(v==null) return; if(!v.trim()) return; try{ await window.API.chat.public.update(m.id, v.trim()); pubAfterId=0; pubList.innerHTML=''; }catch{ notify('Failed to edit'); } };
+    const btnD=document.createElement('button'); btnD.className='btn-icon'; btnD.textContent='Delete'; btnD.onclick=async()=>{ try{ await window.API.chat.public.remove(m.id); pubAfterId=0; pubList.innerHTML=''; }catch{ notify('Failed to delete'); } };
+    actions.appendChild(btnE); actions.appendChild(btnD);
+  }
+  bubble.appendChild(actions); wrap.appendChild(bubble); return wrap;
+}
+function appendPub(m){ pubList.appendChild(renderBubble(m)); pubList.scrollTop=pubList.scrollHeight; }
+async function pollPublic(){try{const items=await window.API.chat.public.list(pubAfterId);if(Array.isArray(items)&&items.length){items.forEach(m=>{appendPub(m);pubAfterId=Math.max(pubAfterId, Number(m.id)||0);});}}catch{} finally{pubTimer=setTimeout(pollPublic,2000);} }
+function startPublic(){if(pubTimer) clearTimeout(pubTimer); pubTimer=setTimeout(pollPublic,50);} 
+pubSend&&pubSend.addEventListener('click', async ()=>{const t=(pubInput.value||'').trim(); if(!t) return; try{const m=await window.API.chat.public.send(t,'text'); pubInput.value=''; appendPub({id:m.id, sender_id:(DB.session()?.user?.id), sender_name:(DB.session()?.user?.name), content:t, kind:'text'}); pubAfterId=Math.max(pubAfterId, Number(m.id)||0);}catch(err){notify('Failed to send');}});
+startPublic();
+
+const chatModal=document.getElementById('chatModal');
+const privList=document.getElementById('privChatList');
+const privInput=document.getElementById('privChatInput');
+const btnSendPriv=document.getElementById('btnSendPriv');
+const btnClosePriv=document.getElementById('btnClosePriv');
+let currentOther=null; let currentListing=null; let privAfterId=0; let privTimer=null;
+function renderPrivBubble(m){
+  const meId=DB.session()?.user?.id; const isMe=m.sender_id===meId;
+  const wrap=document.createElement('div'); wrap.className='chat-msg'+(isMe?' me':'');
+  const bubble=document.createElement('div'); bubble.className='msg-bubble';
+  if(m.deleted_at){ const t=document.createElement('div'); t.className='msg-text'; t.textContent='(message deleted)'; bubble.appendChild(t); }
+  else { const t=document.createElement('div'); t.className='msg-text'; t.textContent=m.content||''; bubble.appendChild(t); }
+  const meta=document.createElement('div'); meta.className='msg-meta'; meta.textContent=(m.sender_name||('User '+m.sender_id))+(m.edited_at?' • edited':''); bubble.appendChild(meta);
+  const actions=document.createElement('div'); actions.className='msg-actions';
+  if(isMe){
+    const btnE=document.createElement('button'); btnE.className='btn-icon'; btnE.textContent='Edit'; btnE.onclick=async()=>{ const v=prompt('Edit message', m.content||''); if(v==null) return; if(!v.trim()) return; try{ await window.API.chat.private.update(m.id, v.trim()); privAfterId=0; privList.innerHTML=''; }catch{ notify('Failed to edit'); } };
+    const btnD=document.createElement('button'); btnD.className='btn-icon'; btnD.textContent='Delete'; btnD.onclick=async()=>{ try{ await window.API.chat.private.remove(m.id); privAfterId=0; privList.innerHTML=''; }catch{ notify('Failed to delete'); } };
+    actions.appendChild(btnE); actions.appendChild(btnD);
+  }
+  bubble.appendChild(actions); wrap.appendChild(bubble); return wrap;
+}
+function appendPriv(m){ privList.appendChild(renderPrivBubble(m)); privList.scrollTop=privList.scrollHeight; }
+async function pollPrivate(){if(!currentOther||!currentListing){return;} try{const items=await window.API.chat.private.list(currentListing, currentOther, privAfterId); if(Array.isArray(items)&&items.length){items.forEach(m=>{appendPriv(m); privAfterId=Math.max(privAfterId, Number(m.id)||0);});}}catch{} finally{privTimer=setTimeout(pollPrivate, 2000);} }
+function openPrivateChat(listingId, otherId){ currentListing=listingId; currentOther=otherId; privAfterId=0; privList.innerHTML=''; chatModal.classList.remove('hidden'); if(privTimer) clearTimeout(privTimer); privTimer=setTimeout(pollPrivate, 80); }
+btnSendPriv&&btnSendPriv.addEventListener('click', async ()=>{const t=(privInput.value||'').trim(); if(!t||!currentOther||!currentListing) return; try{const m=await window.API.chat.private.send(currentListing, currentOther, t); privInput.value=''; appendPriv({id:m.id, sender_id:(DB.session()?.user?.id), sender_name:(DB.session()?.user?.name), content:t}); privAfterId=Math.max(privAfterId, Number(m.id)||0);}catch(err){notify('Failed to send');}});
+btnClosePriv&&btnClosePriv.addEventListener('click', ()=>{ if(privTimer) clearTimeout(privTimer); chatModal.classList.add('hidden'); currentOther=null; currentListing=null; });
 
 // view details modal logic (read-only)
 const vModal=document.querySelector('#viewModal');

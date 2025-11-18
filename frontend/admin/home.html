@@ -40,6 +40,8 @@
       </div>
     </header>
 
+    <div class="two-col">
+      <div class="main-col">
     <!-- Post a Rental Section -->
     <section id="postView" class="card" style="display:none">
       <h2>Post a Rental</h2>
@@ -94,7 +96,7 @@
         </div>
       </form>
     </section>
-
+    
     <!-- Manage Listings Section -->
     <section id="listingsView" class="card" style="display:block">
       <h2>Manage Listings</h2>
@@ -104,6 +106,38 @@
       </div>
       <div id="list"></div>
       <div id="empty" class="meta">No listings yet.</div>
+    </section>
+      </div>
+      <div class="side-col">
+        <section id="publicChatAdmin" class="card sticky-card">
+          <h2>Community Chat</h2>
+          <div id="pubAList" class="chat-list"></div>
+          <div class="chat-input">
+            <input id="pubAInput" placeholder="Type a message..." />
+            <button id="pubASend" class="btn btn-primary">Send</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    
+
+    <section id="privateChatAdmin" class="card">
+      <h2>Private Messages</h2>
+      <div class="row">
+        <div style="flex:1">
+          <div class="meta" style="margin-bottom:6px">Threads</div>
+          <div id="threadsList" class="threads-list"></div>
+        </div>
+        <div style="flex:2">
+          <div class="meta" style="margin-bottom:6px">Conversation</div>
+          <div id="privAList" class="chat-list"></div>
+          <div class="chat-input">
+            <input id="privAInput" placeholder="Type a message..." />
+            <button id="privASend" class="btn btn-primary">Send</button>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 

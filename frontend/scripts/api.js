@@ -32,6 +32,28 @@
       create:(payload)=>request('/api/listings',{method:'POST',body:payload}),
       update:(id,payload)=>request('/api/listings/'+id,{method:'PUT',body:payload}),
       remove:(id)=>request('/api/listings/'+id,{method:'DELETE'})
+    },
+    chat:{
+      public:{
+        list:(afterId)=>{
+          const qs=afterId? ('?afterId='+encodeURIComponent(afterId)) : '';
+          return request('/api/chat/public'+qs);
+        },
+        send:(content,kind='text')=>request('/api/chat/public',{method:'POST',body:{content,kind}}),
+        update:(id,content)=>request('/api/chat/public/'+id,{method:'PUT',body:{content}}),
+        remove:(id)=>request('/api/chat/public/'+id,{method:'DELETE'})
+      },
+      private:{
+        threads:()=>request('/api/chat/private/threads'),
+        list:(listingId,otherId,afterId)=>{
+          const qs=afterId? ('?afterId='+encodeURIComponent(afterId)) : '';
+          return request('/api/chat/private/'+listingId+'/'+otherId+qs);
+        },
+        send:(listingId,otherId,content)=>request('/api/chat/private/'+listingId+'/'+otherId,{method:'POST',body:{content}}),
+        update:(id,content)=>request('/api/chat/private/'+id,{method:'PUT',body:{content}}),
+        remove:(id)=>request('/api/chat/private/'+id,{method:'DELETE'})
+      },
+      admins:()=>request('/api/chat/admins')
     }
   };
 })();

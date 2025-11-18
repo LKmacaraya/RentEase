@@ -13,6 +13,7 @@ html,body{height:100%}
 body{
   margin:0;
   background:radial-gradient(1200px 600px at 80% -10%, #1b2438 0, transparent 60%), var(--bg);
+  background-repeat: no-repeat;
   color:var(--text);
   font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
@@ -36,6 +37,12 @@ h2{margin:0 0 12px 0; font-size:20px; font-weight:700; letter-spacing:.2px}
   box-shadow:0 10px 30px rgba(0,0,0,.25);
   overflow:hidden;
 }
+
+/* layout */
+.two-col{ display:grid; grid-template-columns: 2fr 1fr; gap:16px; align-items:start }
+.main-col{ display:grid; gap:16px }
+.side-col{ position:static }
+.sticky-card{ position: static; top: auto }
 
 .btn{appearance:none; border:none; border-radius:12px; padding:10px 14px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:transform .08s ease, box-shadow .12s ease; margin:2px 4px; text-decoration:none}
 .btn:hover{ text-decoration:none }
@@ -130,3 +137,48 @@ textarea{min-height:90px}
 .map-label{ display:block; color:var(--muted); font-size:14px; margin-top:6px }
 .map-search{ display:flex; gap:8px; margin:8px 0 }
 .map-search input{ flex:1; background:#0f172a; color:var(--text); border:1px solid var(--border); border-radius:10px; padding:8px 10px }
+
+/* chat */
+.chat-list{
+  background:#0f172a; border:1px solid var(--border); border-radius:12px; padding:10px;
+  max-height:340px; overflow:auto; display:flex; flex-direction:column; gap:10px;
+  -ms-overflow-style:none; scrollbar-width:none
+}
+.chat-list::-webkit-scrollbar{ width:0; height:0 }
+.chat-msg{ display:flex; gap:8px; align-items:flex-end }
+.chat-msg.me{ justify-content:flex-end }
+.msg-bubble{ max-width:75%; background:#111827; border:1px solid #1b2740; border-radius:12px; padding:8px 10px; box-shadow:0 4px 12px rgba(0,0,0,.2) }
+.chat-msg.me .msg-bubble{ background:#132036; border-color:#24314d }
+.msg-text{ white-space:pre-wrap; line-height:1.35 }
+.msg-image{ max-width:200px; border-radius:10px; border:1px solid #1b2740; display:block }
+.msg-meta{ color:#9aa4b2; font-size:11px; margin-top:4px }
+.msg-actions{ display:flex; gap:6px; opacity:.0; transition:opacity .12s ease; margin-top:4px }
+.chat-msg.me .msg-actions{ justify-content:flex-end }
+.chat-msg:hover .msg-actions{ opacity:1 }
+.chat-input{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap }
+.chat-input input[type="text"], .chat-input input[type="search"], .chat-input input[type="file"]{ flex:1 }
+.btn-icon{ background:#0f172a; color:var(--text); border:1px solid var(--border); border-radius:10px; padding:8px 10px; cursor:pointer }
+.btn-icon:hover{ background:#131c33 }
+.sticker-picker{ border:1px solid var(--border); background:#0f172a; border-radius:12px; padding:8px; margin-top:8px; display:none }
+.sticker-grid{ display:grid; grid-template-columns:repeat(5, 1fr); gap:8px }
+.sticker-grid img{ width:48px; height:48px; cursor:pointer; border-radius:8px; border:1px solid #1b2740; background:#111827 }
+.sticker-grid img:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.25) }
+.sticker-grid button{ font-size:22px; line-height:1; padding:10px; cursor:pointer; border-radius:8px; border:1px solid #1b2740; background:#111827; color:var(--text) }
+.sticker-grid button:hover{ transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,0,0,.25) }
+
+/* utilities */
+.space-y-6{ display:grid; gap:16px }
+
+@media (max-width: 900px){
+  .two-col{ grid-template-columns:1fr }
+  .side-col{ position:static }
+}
+
+/* private threads */
+.threads-list{ display:grid; gap:10px }
+.thread-card{ background:#0f172a; border:1px solid var(--border); border-radius:12px; padding:12px; cursor:pointer; transition:transform .08s ease, box-shadow .12s ease }
+.thread-card:hover{ transform: translateY(-1px); box-shadow:0 6px 16px rgba(0,0,0,.25) }
+.thread-title{ font-weight:700; margin-bottom:4px }
+.thread-sub{ color:var(--muted); font-size:12px; margin-bottom:6px }
+.thread-snippet{ color:#cbd5e1; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.thread-meta{ color:var(--muted); font-size:11px; margin-top:6px }

@@ -60,6 +60,11 @@ document.getElementById("btnPost").addEventListener("click", () =>{
     }
     sBtn&&sBtn.addEventListener('click', geocodeAndSet);
     sInp&&sInp.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); geocodeAndSet(); }});
+    const locInp=document.querySelector('input[name="location"]');
+    if(locInp&&sInp){
+      sInp.value=locInp.value||'';
+      locInp.addEventListener('input', ()=>{ sInp.value=locInp.value; });
+    }
   }
   // Edit modal map (created once)
   const elEdit=document.getElementById('mapEdit');
@@ -397,3 +402,103 @@ function confirmDialog(message){
     }, 120);
   });
 })();
+
+const pubAList=document.getElementById('pubAList');
+const pubAInput=document.getElementById('pubAInput');
+const pubASend=document.getElementById('pubASend');
+let pubAAfterId=0; let pubATimer=null;
+const A_STICKERS=['👍','😊','❤️','😢','😮'];
+// augment input row with buttons and sticker picker
+const aInputRow=pubASend?.parentElement; let aFileBtn=null, aFileInp=null, aStkBtn=null, aStkPicker=null; let aStkOpen=false;
+if(aInputRow){
+  aFileBtn=document.createElement('button'); aFileBtn.type='button'; aFileBtn.className='btn-icon'; aFileBtn.textContent='Image';
+  aFileInp=document.createElement('input'); aFileInp.type='file'; aFileInp.accept='image/*'; aFileInp.style.display='none';
+  aStkBtn=document.createElement('button'); aStkBtn.type='button'; aStkBtn.className='btn-icon'; aStkBtn.textContent='Stickers';
+  aStkPicker=document.createElement('div'); aStkPicker.className='sticker-picker'; aStkPicker.style.display='none';
+  const grid=document.createElement('div'); grid.className='sticker-grid';
+  A_STICKERS.forEach(em=>{ const btn=document.createElement('button'); btn.type='button'; btn.textContent=em; btn.onclick=async()=>{ try{ await window.API.chat.public.send(em,'sticker'); hideASticker(); }catch{ notify('Failed to send.'); } }; grid.appendChild(btn); });
+  aStkPicker.appendChild(grid);
+  aInputRow.parentElement.appendChild(aStkPicker);
+  // Order: input | Send | Stickers | Image
+  aInputRow.appendChild(pubASend);
+  aInputRow.appendChild(aStkBtn);
+  aInputRow.appendChild(aFileBtn);
+  aInputRow.appendChild(aFileInp);
+  aFileBtn.onclick=()=>aFileInp.click();
+  function hideASticker(){ aStkOpen=false; aStkPicker.style.display='none'; }
+  aStkBtn.onclick=()=>{ aStkOpen=!aStkOpen; aStkPicker.style.display= aStkOpen?'block':'none'; };
+  aFileInp.onchange=async(e)=>{
+    const f=e.target.files && e.target.files[0]; if(!f) return; if(f.size>4.5*1024*1024){ notify('Image is too large. Max 4.5MB'); return; }
+    try{
+      const b64=await new Promise(res=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.readAsDataURL(f); });
+      await window.API.chat.public.send(String(b64),'image'); aFileInp.value='';
+    }catch{ notify('Failed to send.'); }
+  };
+}
+function renderPubBubble(m){
+  const meId=DB.session()?.user?.id; const isMe=m.sender_id===meId;
+  const wrap=document.createElement('div'); wrap.className='chat-msg'+(isMe?' me':'');
+  const bubble=document.createElement('div'); bubble.className='msg-bubble';
+  if(m.deleted_at){ const t=document.createElement('div'); t.className='msg-text'; t.textContent='(message deleted)'; bubble.appendChild(t); }
+  else if(m.kind==='image'||(/^data:image\//.test(m.content))){ const img=document.createElement('img'); img.className='msg-image'; img.src=m.content; bubble.appendChild(img); }
+  else if(m.kind==='sticker'){
+    if(/^https?:\/\//.test(m.content)||/^data:image\//.test(m.content)){
+      const img=document.createElement('img'); img.className='msg-image'; img.src=m.content; bubble.appendChild(img);
+    }else{ const t=document.createElement('div'); t.className='msg-text'; t.style.fontSize='24px'; t.textContent=m.content; bubble.appendChild(t); }
+  }
+  else { const t=document.createElement('div'); t.className='msg-text'; t.textContent=m.content; bubble.appendChild(t); }
+  const meta=document.createElement('div'); meta.className='msg-meta'; meta.textContent=(m.sender_name||('User '+m.sender_id))+(m.edited_at?' • edited':''); bubble.appendChild(meta);
+  const actions=document.createElement('div'); actions.className='msg-actions';
+  if(isMe){
+    const btnE=document.createElement('button'); btnE.className='btn-icon'; btnE.textContent='Edit'; btnE.onclick=async()=>{ const v=prompt('Edit message', m.content||''); if(v==null) return; if(!v.trim()) return; try{ await window.API.chat.public.update(m.id, v.trim()); pubAAfterId=0; pubAList.innerHTML=''; }catch{ notify('Failed to edit.'); } };
+    const btnD=document.createElement('button'); btnD.className='btn-icon'; btnD.textContent='Delete'; btnD.onclick=async()=>{ try{ await window.API.chat.public.remove(m.id); pubAAfterId=0; pubAList.innerHTML=''; }catch{ notify('Failed to delete.'); } };
+    actions.appendChild(btnE); actions.appendChild(btnD);
+  }
+  bubble.appendChild(actions); wrap.appendChild(bubble); return wrap;
+}
+function appendPubA(m){ pubAList.appendChild(renderPubBubble(m)); pubAList.scrollTop=pubAList.scrollHeight; }
+async function pollPubA(){ try{ const items=await window.API.chat.public.list(pubAAfterId); if(Array.isArray(items)&&items.length){ items.forEach(m=>{ appendPubA(m); pubAAfterId=Math.max(pubAAfterId, Number(m.id)||0); }); } }catch{} finally{ pubATimer=setTimeout(pollPubA, 2000); } }
+function startPubA(){ if(pubATimer) clearTimeout(pubATimer); pubATimer=setTimeout(pollPubA, 80); }
+pubASend&&pubASend.addEventListener('click', async ()=>{ const t=(pubAInput.value||'').trim(); if(!t) return; try{ const m=await window.API.chat.public.send(t,'text'); pubAInput.value=''; appendPubA({id:m.id, sender_id:(DB.session()?.user?.id), sender_name:(DB.session()?.user?.name), content:t, kind:'text'}); pubAAfterId=Math.max(pubAAfterId, Number(m.id)||0); }catch{ notify('Failed to send.'); } });
+startPubA();
+
+const threadsList=document.getElementById('threadsList');
+const privAList=document.getElementById('privAList');
+const privAInput=document.getElementById('privAInput');
+const privASend=document.getElementById('privASend');
+let currentOtherA=null; let currentListingA=null; let privAAfterId=0; let privATimer=null; let thrTimer=null;
+function renderPrivABubble(m){ const meId=DB.session()?.user?.id; const isMe=m.sender_id===meId; const wrap=document.createElement('div'); wrap.className='chat-msg'+(isMe?' me':''); const bubble=document.createElement('div'); bubble.className='msg-bubble'; if(m.deleted_at){ const t=document.createElement('div'); t.className='msg-text'; t.textContent='(message deleted)'; bubble.appendChild(t); } else { const t=document.createElement('div'); t.className='msg-text'; t.textContent=m.content||''; bubble.appendChild(t); } const meta=document.createElement('div'); meta.className='msg-meta'; meta.textContent=(m.sender_name||('User '+m.sender_id))+(m.edited_at?' • edited':''); bubble.appendChild(meta); const actions=document.createElement('div'); actions.className='msg-actions'; if(isMe){ const btnE=document.createElement('button'); btnE.className='btn-icon'; btnE.textContent='Edit'; btnE.onclick=async()=>{ const v=prompt('Edit message', m.content||''); if(v==null) return; if(!v.trim()) return; try{ await window.API.chat.private.update(m.id, v.trim()); privAAfterId=0; privAList.innerHTML=''; }catch{ notify('Failed to edit.'); } }; const btnD=document.createElement('button'); btnD.className='btn-icon'; btnD.textContent='Delete'; btnD.onclick=async()=>{ try{ await window.API.chat.private.remove(m.id); privAAfterId=0; privAList.innerHTML=''; }catch{ notify('Failed to delete.'); } }; actions.appendChild(btnE); actions.appendChild(btnD); } bubble.appendChild(actions); wrap.appendChild(bubble); return wrap; }
+function appendPrivA(m){ privAList.appendChild(renderPrivABubble(m)); privAList.scrollTop=privAList.scrollHeight; }
+async function pollPrivA(){ if(!currentOtherA||!currentListingA) return; try{ const items=await window.API.chat.private.list(currentListingA, currentOtherA, privAAfterId); if(Array.isArray(items)&&items.length){ items.forEach(m=>{ appendPrivA(m); privAAfterId=Math.max(privAAfterId, Number(m.id)||0); }); } }catch{} finally{ privATimer=setTimeout(pollPrivA, 2000); } }
+function selectThread(listingId, otherId){ currentListingA=listingId; currentOtherA=otherId; privAAfterId=0; privAList.innerHTML=''; if(privATimer) clearTimeout(privATimer); privATimer=setTimeout(pollPrivA, 80); }
+async function loadThreads(){
+  try{
+    const ts=await window.API.chat.private.threads();
+    threadsList.innerHTML='';
+    (ts||[]).forEach(t=>{
+      const item=document.createElement('div');
+      item.className='thread-card';
+      const title=document.createElement('div');
+      title.className='thread-title';
+      title.textContent=t.listing_title||('Listing #'+t.listing_id);
+      const sub=document.createElement('div');
+      sub.className='thread-sub';
+      sub.textContent='From: '+(t.other_name||('User '+t.other_id));
+      const snip=document.createElement('div');
+      snip.className='thread-snippet';
+      snip.textContent=t.last_content||'';
+      const meta=document.createElement('div');
+      meta.className='thread-meta';
+      meta.textContent=t.last_time? new Date(t.last_time).toLocaleString(): '';
+      item.appendChild(title);
+      item.appendChild(sub);
+      item.appendChild(snip);
+      item.appendChild(meta);
+      item.onclick=()=>selectThread(t.listing_id, t.other_id);
+      threadsList.appendChild(item);
+    });
+  }catch{}
+}
+function startThreads(){ if(thrTimer) clearTimeout(thrTimer); async function tick(){ try{ await loadThreads(); }finally{ thrTimer=setTimeout(tick, 5000); } } thrTimer=setTimeout(tick, 100); }
+privASend&&privASend.addEventListener('click', async ()=>{ const t=(privAInput.value||'').trim(); if(!t||!currentOtherA||!currentListingA) return; try{ const m=await window.API.chat.private.send(currentListingA, currentOtherA, t); privAInput.value=''; appendPrivA({id:m.id, sender_id:(DB.session()?.user?.id), sender_name:(DB.session()?.user?.name), content:t}); privAAfterId=Math.max(privAAfterId, Number(m.id)||0); }catch{ notify('Failed to send.'); } });
+startThreads();

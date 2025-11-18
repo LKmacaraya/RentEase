@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import healthRouter from './routes/health.routes.js';
 import authRouter from './routes/auth.routes.js';
 import listingsRouter from './routes/listings.routes.js';
+import chatRouter from './routes/chat.routes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json({ limit: '5mb' }));
 app.use('/api/health', healthRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/listings', listingsRouter);
+app.use('/api/chat', chatRouter);
 
 app.use(errorHandler);
 

@@ -38,6 +38,19 @@
       </div>
     </div>
   </div>
+
+  <div id="chatModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Private Chat</h3>
+      <div id="privChatList" class="chat-list"></div>
+      <div class="chat-input">
+        <input id="privChatInput" placeholder="Type a message..." />
+        <button id="btnSendPriv" class="btn btn-primary">Send</button>
+        <button id="btnClosePriv" class="btn btn-danger">Close</button>
+      </div>
+    </div>
+  </div>
+
       <div class="actions">
         <span id="apiStatus" class="status-badge">Checking…</span>
         <button id="btnLogout" class="btn btn-danger">
@@ -51,47 +64,61 @@
       </div>
     </header>
 
-    <section id="searchView" class="card">
-      <h2>Search & Filter</h2>
-      <div class="row">
-        <label>Location
-          <input id="fLocation" placeholder="e.g. Talamban" />
-        </label>
-        <label>Bedrooms
-          <input id="fBedrooms" type="number" min="0" step="1" />
-        </label>
-      </div>
-      <div class="row">
-        <label>Min Price
-          <input id="fMinPrice" type="number" min="0" step="1" />
-        </label>
-        <label>Max Price
-          <input id="fMaxPrice" type="number" min="0" step="1" />
-        </label>
-      </div>
-      <div class="row">
-        <label>Status
-          <select id="fStatus">
-            <option value="">Any</option>
-            <option value="available">Available</option>
-            <option value="rented">Rented</option>
-          </select>
-        </label>
-        <label>Search
-          <input id="fQuery" placeholder="title, description, contact..." />
-        </label>
-      </div>
-      <div class="row">
-        <button id="btnApply" class="btn btn-primary">Apply Filters</button>
-        <button id="btnClear" class="btn btn-ghost">Clear</button>
-      </div>
-    </section>
+    <div class="two-col">
+      <div class="main-col">
+        <section id="searchView" class="card">
+          <h2>Search & Filter</h2>
+          <div class="row">
+            <label>Location
+              <input id="fLocation" placeholder="e.g. Talamban" />
+            </label>
+            <label>Bedrooms
+              <input id="fBedrooms" type="number" min="0" step="1" />
+            </label>
+          </div>
+          <div class="row">
+            <label>Min Price
+              <input id="fMinPrice" type="number" min="0" step="1" />
+            </label>
+            <label>Max Price
+              <input id="fMaxPrice" type="number" min="0" step="1" />
+            </label>
+          </div>
+          <div class="row">
+            <label>Status
+              <select id="fStatus">
+                <option value="">Any</option>
+                <option value="available">Available</option>
+                <option value="rented">Rented</option>
+              </select>
+            </label>
+            <label>Search
+              <input id="fQuery" placeholder="title, description, contact..." />
+            </label>
+          </div>
+          <div class="row">
+            <button id="btnApply" class="btn btn-primary">Apply Filters</button>
+            <button id="btnClear" class="btn btn-ghost">Clear</button>
+          </div>
+        </section>
 
-    <section id="listingsView" class="card">
-      <h2>Listings</h2>
-      <div id="list"></div>
-      <div id="empty" class="meta">No listings yet.</div>
-    </section>
+        <section id="listingsView" class="card">
+          <h2>Listings</h2>
+          <div id="list"></div>
+          <div id="empty" class="meta">No listings yet.</div>
+        </section>
+      </div>
+      <div class="side-col">
+        <section id="publicChat" class="card sticky-card">
+          <h2>Community Chat</h2>
+          <div id="pubChatList" class="chat-list"></div>
+          <div class="chat-input">
+            <input id="pubChatInput" placeholder="Type a message..." />
+            <button id="pubChatSend" class="btn btn-primary">Send</button>
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
 
   <!-- Modal -->
