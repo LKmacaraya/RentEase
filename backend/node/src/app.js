@@ -22,11 +22,16 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(express.json({ limit: '5mb' }));
 
-const API_PREFIX = process.env.VERCEL ? '' : '/api';
-app.use(`${API_PREFIX}/health`, healthRouter);
-app.use(`${API_PREFIX}/auth`, authRouter);
-app.use(`${API_PREFIX}/listings`, listingsRouter);
-app.use(`${API_PREFIX}/chat`, chatRouter);
+// Mount both without and with '/api' to work both locally and on Vercel
+app.use('/health', healthRouter);
+app.use('/auth', authRouter);
+app.use('/listings', listingsRouter);
+app.use('/chat', chatRouter);
+
+app.use('/api/health', healthRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/listings', listingsRouter);
+app.use('/api/chat', chatRouter);
 
 app.use(errorHandler);
 
