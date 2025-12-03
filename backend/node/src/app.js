@@ -17,12 +17,14 @@ app.use(express.json({ limit: '5mb' }));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicDir = path.resolve(__dirname, '../../../frontend');
-app.use(express.static(publicDir));
 
-// Root route -> index.html
+// Root route -> landing page (must be before express.static)
 app.get('/', (req, res) => {
   res.sendFile(path.join(publicDir, 'landing.html'));
 });
+
+// Static assets and other pages
+app.use(express.static(publicDir));
 
 app.use('/api/health', healthRouter);
 app.use('/api/auth', authRouter);
