@@ -21,7 +21,7 @@ app.use(express.static(publicDir));
 
 // Root route -> index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(publicDir, 'index.html'));
+  res.sendFile(path.join(publicDir, 'landing.html'));
 });
 
 app.use('/api/health', healthRouter);
