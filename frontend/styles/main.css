@@ -225,9 +225,9 @@ textarea{min-height:90px}
 
 /* Animated gallery marquee */
 .gallery-card{ overflow:hidden }
-.gallery-marquee{ display:flex; gap:24px; overflow:hidden }
-.gallery-track{ display:flex; gap:16px; animation: scrollX 30s linear infinite }
+.gallery-marquee{ display:flex; gap:0; overflow:hidden }
+.gallery-track{ display:flex; gap:0; animation: scrollX 30s linear infinite; will-change: transform }
 .gallery-track.track2{ animation-delay: 15s }
-.gallery-track img{ width:220px; height:140px; object-fit:cover; border-radius:12px; border:1px solid var(--border); filter:saturate(1.05); }
+.gallery-track img{ width:220px; height:140px; object-fit:cover; border-radius:0; border:none; display:block; filter:saturate(1.05); flex:0 0 auto; margin:0; padding:0 }
 .gallery-track:hover{ animation-play-state: paused }
 @keyframes scrollX{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
