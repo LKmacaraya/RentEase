@@ -99,14 +99,7 @@ textarea{min-height:90px}
 /* --- LOGIN LAYOUT --- */
 .login-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:stretch }
 .login-main{ display:block }
-.login-art{ border:none; border-radius:16px; background:
-  /* dark -> light overlay */
-  linear-gradient(to top left, rgba(11,15,23,.80) 0%, rgba(11,15,23,.55) 55%, rgba(11,15,23,.08) 100%),
-  linear-gradient(180deg, rgba(124,156,255,.08), rgba(124,156,255,0)),
-  radial-gradient(600px 300px at 70% 10%, rgba(124,156,255,.12), transparent 60%),
-  url('https://images.unsplash.com/photo-1501183638710-841dd1904471?q=80&w=1600&auto=format&fit=crop');
-  background-size: cover; background-position:center; min-height: 320px;
-}
+.login-art{ border:none; border-radius:16px; background: url('../images/log-art.jpg'); background-size:cover; background-position:center; min-height:320px }
 .mb-8{ margin-bottom:8px }
 
 @media (max-width:680px){
@@ -220,6 +213,7 @@ textarea{min-height:90px}
 .gallery-card{ overflow:hidden }
 .gallery-marquee{ display:flex; gap:24px; overflow:hidden }
 .gallery-track{ display:flex; gap:16px; animation: scrollX 30s linear infinite }
+.gallery-track.track2{ animation-delay: 15s }
 .gallery-track img{ width:220px; height:140px; object-fit:cover; border-radius:12px; border:1px solid var(--border); filter:saturate(1.05); }
 .gallery-track:hover{ animation-play-state: paused }
 @keyframes scrollX{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
