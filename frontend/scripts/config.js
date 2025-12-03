@@ -1,3 +1,3 @@
 window.APP_CONFIG = {
-  API_BASE: 'http://localhost:4000'
+  API_BASE: 'https://rent-ease-eh3r.vercel.app'
 };
