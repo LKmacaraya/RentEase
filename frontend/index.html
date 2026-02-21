@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="./styles/main.css" />
 </head>
-<body>
+<body class="auth-page">
   <div class="app">
-    <header class="topbar">
-      <div>
+    <header class="topbar auth-topbar">
+      <div class="auth-brand">
         <h1>RentEase</h1>
         <div class="subtitle">Local Rental Finder</div>
       </div>
@@ -18,10 +18,12 @@
       </div>
     </header>
 
-    <section class="card">
-      <h2>Login</h2>
+    <section class="card auth-shell">
       <div class="login-grid">
-        <div class="login-main">
+        <div class="login-main auth-main">
+          <p class="auth-kicker">Welcome Back</p>
+          <h2>Login to your account</h2>
+          <p class="auth-lead">Find rentals faster, message owners directly, and manage your activity in one place.</p>
           <div class="tabs">
             <button class="tab active" data-tab="user">User</button>
             <button class="tab" data-tab="admin">Owner</button>
@@ -69,7 +71,17 @@
             </form>
           </div>
         </div>
-        <div class="login-art" aria-hidden="true"></div>
+        <aside class="login-art auth-art-panel">
+          <div class="auth-art-copy">
+            <p class="auth-art-kicker">Rent with confidence</p>
+            <h3>Simple, secure, and built for local communities.</h3>
+            <ul class="auth-points">
+              <li>Curated rental listings with quick search</li>
+              <li>Direct owner messaging from one dashboard</li>
+              <li>Smooth mobile experience for on-the-go browsing</li>
+            </ul>
+          </div>
+        </aside>
       </div>
     </section>
 

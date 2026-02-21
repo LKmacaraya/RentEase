@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="./styles/main.css" />
 </head>
-<body>
+<body class="auth-page">
   <div class="app">
-    <header class="topbar">
-      <div>
+    <header class="topbar auth-topbar">
+      <div class="auth-brand">
         <h1>RentEase</h1>
         <div class="subtitle">Local Rental Finder</div>
       </div>
@@ -19,10 +19,12 @@
       </div>
     </header>
 
-    <section class="card">
+    <section class="card auth-shell">
       <div class="login-grid">
-        <div class="login-main">
-          <h2>Register</h2>
+        <div class="login-main auth-main">
+          <p class="auth-kicker">Get Started</p>
+          <h2>Create your account</h2>
+          <p class="auth-lead">Set up your profile and start exploring nearby rental properties in minutes.</p>
           <form id="formRegister" class="col">
             <label>Full Name
               <input name="name" required placeholder="Juan Dela Cruz" />
@@ -34,9 +36,20 @@
               <input name="password" type="password" required placeholder="Create a password" />
             </label>
             <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+            <a class="btn btn-ghost btn-block mb-8" href="./index.html">Already have an account? Login</a>
           </form>
         </div>
-        <div class="login-art" aria-hidden="true"></div>
+        <aside class="login-art auth-art-panel">
+          <div class="auth-art-copy">
+            <p class="auth-art-kicker">Why RentEase</p>
+            <h3>Everything you need to discover and secure your next rental.</h3>
+            <ul class="auth-points">
+              <li>Fast onboarding with a clean profile setup</li>
+              <li>Search-ready experience right after sign up</li>
+              <li>Built-in messaging to connect with owners</li>
+            </ul>
+          </div>
+        </aside>
       </div>
     </section>
     
