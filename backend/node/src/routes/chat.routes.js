@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authRequired, adminOnly } from '../middleware/auth.js';
+import { authRequired } from '../middleware/auth.js';
 import { getPublicMessages, postPublicMessage, updatePublicMessage, deletePublicMessage, getPrivateMessages, postPrivateMessage, updatePrivateMessage, deletePrivateMessage, listPrivateThreads, listAdmins } from '../controllers/chat.controller.js';
 
 const router = Router();

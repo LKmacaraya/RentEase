@@ -45,11 +45,6 @@ document.querySelector("#btnClear").addEventListener("click",()=>{["#fLocation",
 document.querySelector("#btnLogout").addEventListener("click",()=>{localStorage.removeItem(DB.kSession);window.location.href="../index.html";});
 applyFilters();
 
-const modal=document.querySelector("#msgModal"),msgBox=document.querySelector("#msgText"),btnSend=document.querySelector("#btnSendMsg"),btnCall=document.querySelector("#btnCallOwner"),btnCancel=document.querySelector("#btnCancelMsg");
-function openModal(phone){modal.classList.remove("hidden");msgBox.value="";btnCall.href="tel:"+phone;}
-btnSend.onclick=()=>{if(msgBox.value.trim()===""){notify("Please enter a message.");return;}notify("Message sent successfully!");modal.classList.add("hidden");};
-btnCancel.onclick=()=>modal.classList.add("hidden");
-
 const pubList=document.getElementById('pubChatList');
 const pubInput=document.getElementById('pubChatInput');
 const pubSend=document.getElementById('pubChatSend');

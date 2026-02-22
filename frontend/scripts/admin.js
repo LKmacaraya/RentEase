@@ -1,14 +1,11 @@
 // --- Database handling using localStorage ---
 const DB = {
   kSession: "RE_session",
-  read(k, d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch{ return d; } },
   session(){ try{ return JSON.parse(localStorage.getItem(this.kSession)); }catch{ return null; } },
   guard(){ const s=this.session(); if(!s || s.role!=="admin"){ window.location.href = "../index.html"; } }
 };
 DB.guard();
 
-function uid(){ return crypto.randomUUID ? crypto.randomUUID() : Date.now()+Math.random(); }
-function nowISO(){ return new Date().toISOString(); }
 function money(v){ const n=Number(v); return Number.isNaN(n)?v:"₱"+n.toLocaleString(); }
 function placeholderImg(t="No Photo"){return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><rect width='100%' height='100%' fill='#111827'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#6b7280' font-size='12'>${t}</text></svg>`);} 
 
