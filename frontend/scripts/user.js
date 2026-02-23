@@ -1,4 +1,4 @@
-const DB={kSession:"RE_session",session(){try{return JSON.parse(localStorage.getItem(this.kSession));}catch{return null;}},guard(){const s=this.session();if(!s||s.role!=="user"){window.location.href="../index.html";}}};
+const DB={kSession:"RE_session",session(){try{return JSON.parse(localStorage.getItem(this.kSession));}catch{return null;}},setSession(v){localStorage.setItem(this.kSession,JSON.stringify(v));},guard(){const s=this.session();if(!s||s.role!=="user"){window.location.href="../index.html";}}};
 DB.guard();
 
 function money(v){const n=Number(v);return Number.isNaN(n)?v:"₱"+n.toLocaleString();}
@@ -40,10 +40,83 @@ async function applyFilters(){
   }catch{ render([]); }
 }
 
+function extractApiError(err, fallback='Something went wrong'){
+  const raw=String(err?.message||'').trim();
+  if(!raw) return fallback;
+  try{
+    const parsed=JSON.parse(raw);
+    if(parsed&&typeof parsed.error==='string'&&parsed.error.trim()) return parsed.error.trim();
+  }catch{}
+  return raw;
+}
+
+const profileModal=document.getElementById('profileModal');
+const profileForm=document.getElementById('profileForm');
+const profileName=document.getElementById('profileName');
+const profileEmail=document.getElementById('profileEmail');
+const profilePassword=document.getElementById('profilePassword');
+const btnProfile=document.getElementById('btnProfile');
+const btnProfileCancel=document.getElementById('btnProfileCancel');
+const btnProfileSave=document.getElementById('btnProfileSave');
+
+function hydrateProfileForm(user){
+  if(!profileForm||!user) return;
+  profileName.value=user.name||'';
+  profileEmail.value=user.email||'';
+  profilePassword.value='';
+}
+
+function syncSessionUser(user){
+  const current=DB.session()||{};
+  DB.setSession({...current,username:user?.name||current.username,user:{...current.user,...user}});
+}
+
+async function refreshSessionProfile(){
+  if(!window.API?.auth?.me) return;
+  try{
+    const resp=await window.API.auth.me();
+    if(resp?.user){
+      syncSessionUser(resp.user);
+      hydrateProfileForm(resp.user);
+    }
+  }catch{}
+}
+
+function openProfileModal(){
+  hydrateProfileForm(DB.session()?.user||{});
+  profileModal&&profileModal.classList.remove('hidden');
+}
+
 document.querySelector("#btnApply").addEventListener("click",applyFilters);
 document.querySelector("#btnClear").addEventListener("click",()=>{["#fLocation","#fBedrooms","#fMinPrice","#fMaxPrice","#fStatus","#fQuery"].forEach(s=>document.querySelector(s).value="");applyFilters();});
 document.querySelector("#btnLogout").addEventListener("click",()=>{localStorage.removeItem(DB.kSession);window.location.href="../index.html";});
+btnProfile&&btnProfile.addEventListener('click',openProfileModal);
+btnProfileCancel&&btnProfileCancel.addEventListener('click',()=>profileModal&&profileModal.classList.add('hidden'));
+profileForm&&profileForm.addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  const name=String(profileName?.value||'').trim();
+  const email=String(profileEmail?.value||'').trim();
+  const password=String(profilePassword?.value||'').trim();
+  if(!name||!email){ notify('Name and email are required'); return; }
+  const payload={name,email};
+  if(password) payload.password=password;
+  try{
+    if(btnProfileSave) btnProfileSave.disabled=true;
+    const resp=await window.API.auth.updateProfile(payload);
+    if(resp?.user){
+      syncSessionUser(resp.user);
+      hydrateProfileForm(resp.user);
+    }
+    profileModal&&profileModal.classList.add('hidden');
+    notify('Profile updated successfully');
+  }catch(err){
+    notify(extractApiError(err,'Failed to update profile'));
+  }finally{
+    if(btnProfileSave) btnProfileSave.disabled=false;
+  }
+});
 applyFilters();
+refreshSessionProfile();
 
 const pubList=document.getElementById('pubChatList');
 const pubInput=document.getElementById('pubChatInput');

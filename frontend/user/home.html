@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>RentEase – Listings</title>
+  <title>RentEase - Listings</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="../styles/main.css" />
 </head>
@@ -13,47 +13,10 @@
         <h1>RentEase</h1>
         <div class="subtitle">Local Rental Finder</div>
       </div>
-
-  <!-- Notification Modal -->
-  <div id="notifyModal" class="modal hidden">
-    <div class="modal-content">
-      <div id="notifyText" style="margin-bottom:12px"></div>
-      <div class="modal-actions">
-        <button id="notifyOk" class="btn btn-primary">OK</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- View Details Modal (read-only) -->
-  <div id="viewModal" class="modal hidden">
-    <div class="modal-content">
-      <h3 id="vTitle">Listing Details</h3>
-      <img id="vPhoto" alt="Listing photo" style="width:100%;max-height:260px;object-fit:cover;border-radius:12px;border:1px solid var(--border);margin:8px 0" />
-      <div id="vMeta" class="meta"></div>
-      <div id="vDesc" style="margin:8px 0 12px 0"></div>
-      <div id="vAddr" class="meta"></div>
-      <div id="vLinks" class="modal-actions"></div>
-      <div class="modal-actions">
-        <button id="btnCloseView" class="btn btn-primary">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="chatModal" class="modal hidden">
-    <div class="modal-content">
-      <h3>Private Chat</h3>
-      <div id="privChatList" class="chat-list"></div>
-      <div class="chat-input">
-        <input id="privChatInput" placeholder="Type a message..." />
-        <button id="btnSendPriv" class="btn btn-primary">Send</button>
-        <button id="btnClosePriv" class="btn btn-danger">Close</button>
-      </div>
-    </div>
-  </div>
-
       <div class="actions">
-        <span id="apiStatus" class="status-badge">Checking…</span>
+        <span id="apiStatus" class="status-badge">Checking...</span>
         <button class="btn btn-ghost theme-toggle" type="button" data-theme-toggle>Theme</button>
+        <button id="btnProfile" class="btn btn-ghost">Profile</button>
         <button id="btnLogout" class="btn btn-danger">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px">
             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -122,10 +85,67 @@
     </div>
   </div>
 
-<script src="../scripts/config.js"></script>
-<script src="../scripts/theme.js"></script>
-<script src="../scripts/api.js"></script>
-<script src="../scripts/user.js"></script>
+  <div id="notifyModal" class="modal hidden">
+    <div class="modal-content">
+      <div id="notifyText" style="margin-bottom:12px"></div>
+      <div class="modal-actions">
+        <button id="notifyOk" class="btn btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="viewModal" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="vTitle">Listing Details</h3>
+      <img id="vPhoto" alt="Listing photo" style="width:100%;max-height:260px;object-fit:cover;border-radius:12px;border:1px solid var(--border);margin:8px 0" />
+      <div id="vMeta" class="meta"></div>
+      <div id="vDesc" style="margin:8px 0 12px 0"></div>
+      <div id="vAddr" class="meta"></div>
+      <div id="vLinks" class="modal-actions"></div>
+      <div class="modal-actions">
+        <button id="btnCloseView" class="btn btn-primary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="chatModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Private Chat</h3>
+      <div id="privChatList" class="chat-list"></div>
+      <div class="chat-input">
+        <input id="privChatInput" placeholder="Type a message..." />
+        <button id="btnSendPriv" class="btn btn-primary">Send</button>
+        <button id="btnClosePriv" class="btn btn-danger">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="profileModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>My Profile</h3>
+      <form id="profileForm" class="space-y-6">
+        <div class="row">
+          <label>Full Name
+            <input id="profileName" name="name" required />
+          </label>
+          <label>Email
+            <input id="profileEmail" name="email" type="email" required />
+          </label>
+        </div>
+        <label>New Password (optional)
+          <input id="profilePassword" name="password" type="password" minlength="6" placeholder="Leave blank to keep current password" />
+        </label>
+        <div class="modal-actions">
+          <button type="button" id="btnProfileCancel" class="btn btn-ghost">Cancel</button>
+          <button type="submit" id="btnProfileSave" class="btn btn-primary">Save Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../scripts/config.js"></script>
+  <script src="../scripts/theme.js"></script>
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/user.js"></script>
 </body>
 </html>
-

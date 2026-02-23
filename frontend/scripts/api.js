@@ -17,6 +17,10 @@
     session, setSession,
     login: (email,password)=>request('/api/auth/login',{method:'POST',body:{email,password}}),
     register: (name,email,password)=>request('/api/auth/register',{method:'POST',body:{name,email,password}}),
+    auth:{
+      me:()=>request('/api/auth/me'),
+      updateProfile:(payload)=>request('/api/auth/me',{method:'PUT',body:payload})
+    },
     listings:{
       list:(params={})=>{
         const qs=new URLSearchParams();
