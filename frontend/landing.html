@@ -30,13 +30,68 @@
       <div class="hero-body">
         <div class="hero-kicker">Trusted by renters in every city district</div>
         <h2 class="hero-title">Find rentals that fit your life.</h2>
-        <p class="hero-sub">Browse curated listings, chat with owners, and manage your rentals easily in one modern, fast experience.</p>
+        <p class="hero-sub">RentEase helps you compare neighborhoods, estimate monthly costs, and connect with owners quickly. From first shortlist to signed lease, everything stays in one place.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="./register.html">Get Started</a>
           <a class="btn btn-ghost" href="./index.html">I already have an account</a>
         </div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <div class="metric-value" data-counter="1200" data-counter-suffix="+">0</div>
+            <div class="metric-label">Active Listings</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" data-counter="98" data-counter-suffix="%">0</div>
+            <div class="metric-label">Owner Response Score</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" data-counter="24" data-counter-suffix="h">0</div>
+            <div class="metric-label">Avg. Hours to First Reply</div>
+          </div>
+        </div>
       </div>
       <div class="hero-art"></div>
+    </section>
+
+    <section class="card detail-card">
+      <div class="section-head">
+        <h2>Choose your rental path</h2>
+        <p class="section-sub">Switch between renter goals to see how RentEase adapts to your needs.</p>
+      </div>
+      <div class="persona-tabs" role="tablist" aria-label="Rental persona tabs">
+        <button class="persona-tab active" type="button" data-persona-tab="first-time" aria-selected="true">First-time Renter</button>
+        <button class="persona-tab" type="button" data-persona-tab="family" aria-selected="false">Family Move</button>
+        <button class="persona-tab" type="button" data-persona-tab="student" aria-selected="false">Student Setup</button>
+      </div>
+      <div class="persona-panels">
+        <article class="persona-panel active" data-persona-panel="first-time">
+          <h3>Start smart with guided search</h3>
+          <p>Get checklist-style listing cards with move-in dates, deposit requirements, and nearby transport hints so you avoid surprises.</p>
+          <ul class="persona-points">
+            <li>Compare total monthly costs, not just rent</li>
+            <li>Save homes and get price-drop alerts</li>
+            <li>Message owners with reusable question templates</li>
+          </ul>
+        </article>
+        <article class="persona-panel" data-persona-panel="family">
+          <h3>Plan for space, schools, and commute</h3>
+          <p>Use area-focused filters to shortlist homes near schools, markets, and transit, then share one shortlist with your household.</p>
+          <ul class="persona-points">
+            <li>See bedroom and layout highlights instantly</li>
+            <li>Track schedule-ready viewing appointments</li>
+            <li>Store all family notes in one conversation thread</li>
+          </ul>
+        </article>
+        <article class="persona-panel" data-persona-panel="student">
+          <h3>Find flexible and budget-friendly options</h3>
+          <p>Sort listings by walkability, campus distance, and furnished options to secure a place that fits your semester timeline.</p>
+          <ul class="persona-points">
+            <li>Filter for shared homes and studio units</li>
+            <li>Preview commute times for class hours</li>
+            <li>Keep documents and chats organized in one place</li>
+          </ul>
+        </article>
+      </div>
     </section>
 
     <section class="card">
@@ -59,6 +114,31 @@
       </div>
     </section>
 
+    <section class="card calc-card">
+      <div class="section-head">
+        <h2>Monthly Budget Estimator</h2>
+        <p class="section-sub">Adjust the sliders to estimate your expected monthly housing spend.</p>
+      </div>
+      <div class="calc-grid">
+        <label class="calc-field">Monthly Rent
+          <input type="range" min="250" max="4500" step="50" value="1200" data-calc-input="rent" />
+          <div class="calc-read" data-calc-read="rent">$1,200</div>
+        </label>
+        <label class="calc-field">Utilities
+          <input type="range" min="50" max="900" step="10" value="150" data-calc-input="utilities" />
+          <div class="calc-read" data-calc-read="utilities">$150</div>
+        </label>
+        <label class="calc-field">Transport
+          <input type="range" min="0" max="700" step="10" value="120" data-calc-input="transport" />
+          <div class="calc-read" data-calc-read="transport">$120</div>
+        </label>
+      </div>
+      <div class="calc-total">
+        <div class="calc-total-label">Estimated Monthly Total</div>
+        <div class="calc-total-value" data-calc-total>$1,470</div>
+      </div>
+    </section>
+
     <section class="card gallery-card">
       <h2>Explore Neighborhoods</h2>
       <div class="gallery-marquee">
@@ -77,6 +157,50 @@
       </div>
     </section>
 
+    <section class="card timeline-card">
+      <div class="section-head">
+        <h2>How RentEase Works</h2>
+        <p class="section-sub">A clear path from search to move-in.</p>
+      </div>
+      <div class="timeline-grid">
+        <article class="timeline-step" data-step>
+          <div class="timeline-index">01</div>
+          <h3>Search with precision</h3>
+          <p>Use practical filters and neighborhood insights to shortlist homes quickly.</p>
+        </article>
+        <article class="timeline-step" data-step>
+          <div class="timeline-index">02</div>
+          <h3>Talk to owners directly</h3>
+          <p>Send questions, schedule viewings, and keep all updates in one thread.</p>
+        </article>
+        <article class="timeline-step" data-step>
+          <div class="timeline-index">03</div>
+          <h3>Finalize with confidence</h3>
+          <p>Track terms and documents clearly so you can decide without guesswork.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card faq-card">
+      <div class="section-head">
+        <h2>Frequently Asked Questions</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>How quickly can I get replies from owners?</summary>
+          <p>Most active listings respond within 24 hours. Reply speed depends on owner availability and listing demand.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I compare multiple listings side by side?</summary>
+          <p>Yes. Save listings, then compare rent, fees, amenities, and location before scheduling viewings.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is RentEase mobile-friendly?</summary>
+          <p>Yes. The interface is optimized for phone and desktop, including listing cards, chat, and account actions.</p>
+        </details>
+      </div>
+    </section>
+
     <section class="card cta">
       <div class="cta-row">
         <div>
@@ -89,24 +213,8 @@
         </div>
       </div>
     </section>
-
-    <section class="card">
-      <div class="grid-3">
-        <div class="feature-card">
-          <div class="feature-title">Fast and Lightweight</div>
-          <div class="feature-text">A minimal, responsive experience that works great on mobile and desktop.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-title">Verified Owners</div>
-          <div class="feature-text">Profiles and roles keep conversations clear between renters and admins.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-title">Modern Security</div>
-          <div class="feature-text">JWT-based sessions protect access to private actions and chats.</div>
-        </div>
-      </div>
-    </section>
   </div>
   <script src="./scripts/theme.js"></script>
+  <script src="./scripts/landing.js"></script>
 </body>
 </html>

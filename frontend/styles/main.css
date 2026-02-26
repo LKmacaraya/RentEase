@@ -477,9 +477,220 @@ body.landing-page .cta{ animation-delay:.3s }
   body.landing-page .hero-title{ font-size:2rem; }
   body.landing-page .hero-sub{ font-size:.95rem; line-height:1.58; }
   body.landing-page .btn{ width:100%; }
-  body.landing-page .hero-actions{ width:100%; }
-  body.landing-page .grid-3{ grid-template-columns:1fr; }
-  body.landing-page .gallery-track img{ width:200px; height:130px; }
+body.landing-page .hero-actions{ width:100%; }
+body.landing-page .grid-3{ grid-template-columns:1fr; }
+body.landing-page .gallery-track img{ width:200px; height:130px; }
+}
+
+body.landing-page .section-head{
+  display:grid;
+  gap:6px;
+  margin-bottom:12px;
+}
+body.landing-page .section-sub{
+  margin:0;
+  color:#4d6862;
+  font-size:.95rem;
+}
+:root[data-theme="dark"] body.landing-page .section-sub{ color:#abc5bf; }
+
+body.landing-page .hero-metrics{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(120px, 1fr));
+  gap:10px;
+  margin-top:6px;
+}
+body.landing-page .metric{
+  border:1px solid rgba(31,143,133,.25);
+  background:#ffffffe0;
+  border-radius:12px;
+  padding:10px 12px;
+}
+:root[data-theme="dark"] body.landing-page .metric{ background:#142128d8; }
+body.landing-page .metric-value{
+  font-family:"Manrope", "Segoe UI", Arial, sans-serif;
+  font-size:1.28rem;
+  font-weight:800;
+}
+body.landing-page .metric-label{
+  color:#51706a;
+  font-size:.78rem;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+:root[data-theme="dark"] body.landing-page .metric-label{ color:#9db8b2; }
+
+body.landing-page .detail-card{ display:grid; gap:12px; }
+body.landing-page .persona-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+body.landing-page .persona-tab{
+  border:1px solid var(--landing-border);
+  border-radius:999px;
+  background:#ffffffcc;
+  color:#1f3c38;
+  padding:8px 14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .1s ease, box-shadow .1s ease, background .12s ease;
+}
+body.landing-page .persona-tab.active{
+  background:linear-gradient(135deg, #1f8f85, #26a99f);
+  color:#f4fffd;
+  border-color:transparent;
+}
+body.landing-page .persona-tab:hover{
+  transform:translateY(-1px);
+  box-shadow:0 7px 18px rgba(17,52,48,.14);
+}
+:root[data-theme="dark"] body.landing-page .persona-tab{
+  background:#132229;
+  color:#d4ede8;
+}
+body.landing-page .persona-panels{
+  border:1px solid rgba(31,143,133,.24);
+  border-radius:16px;
+  background:rgba(255,255,255,.68);
+  padding:16px;
+}
+:root[data-theme="dark"] body.landing-page .persona-panels{ background:#102128d0; }
+body.landing-page .persona-panel{ display:none; }
+body.landing-page .persona-panel.active{ display:block; animation:fadePanel .35s ease; }
+body.landing-page .persona-panel h3{
+  margin:0 0 8px;
+  font-family:"Manrope", "Segoe UI", Arial, sans-serif;
+  font-size:1.22rem;
+}
+body.landing-page .persona-panel p{
+  margin:0 0 10px;
+  color:#44625c;
+}
+:root[data-theme="dark"] body.landing-page .persona-panel p{ color:#b1cbc5; }
+body.landing-page .persona-points{
+  margin:0;
+  padding-left:18px;
+  display:grid;
+  gap:7px;
+}
+
+body.landing-page .calc-card{ display:grid; gap:12px; }
+body.landing-page .calc-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:12px;
+}
+body.landing-page .calc-field{
+  display:grid;
+  gap:8px;
+  border:1px solid rgba(31,143,133,.2);
+  border-radius:14px;
+  padding:12px;
+  background:#ffffffe6;
+  color:#27453f;
+}
+:root[data-theme="dark"] body.landing-page .calc-field{
+  background:#12232add;
+  color:#d8efea;
+}
+body.landing-page .calc-field input[type="range"]{
+  accent-color:#1f8f85;
+}
+body.landing-page .calc-read{
+  font-weight:700;
+  color:#1b6e66;
+}
+:root[data-theme="dark"] body.landing-page .calc-read{ color:#75d8cd; }
+body.landing-page .calc-total{
+  border:1px solid rgba(255,122,69,.35);
+  border-radius:14px;
+  padding:14px 16px;
+  background:linear-gradient(130deg, rgba(255,122,69,.12), rgba(255,122,69,.04));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+body.landing-page .calc-total-label{
+  color:#724933;
+  font-size:.9rem;
+}
+:root[data-theme="dark"] body.landing-page .calc-total-label{ color:#f2bfa8; }
+body.landing-page .calc-total-value{
+  font-family:"Manrope", "Segoe UI", Arial, sans-serif;
+  font-size:1.5rem;
+  font-weight:800;
+}
+
+body.landing-page .timeline-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:12px;
+}
+body.landing-page .timeline-step{
+  border:1px solid rgba(31,143,133,.2);
+  border-radius:14px;
+  padding:14px;
+  background:#ffffffe8;
+  opacity:.55;
+  transform:translateY(8px);
+  transition:opacity .26s ease, transform .26s ease;
+}
+body.landing-page .timeline-step.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+:root[data-theme="dark"] body.landing-page .timeline-step{ background:#122229de; }
+body.landing-page .timeline-index{
+  font-size:.78rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  color:#1f8f85;
+}
+body.landing-page .timeline-step h3{
+  margin:8px 0 8px;
+  font-size:1rem;
+}
+body.landing-page .timeline-step p{
+  margin:0;
+  color:#48645f;
+  font-size:.91rem;
+}
+:root[data-theme="dark"] body.landing-page .timeline-step p{ color:#aec8c2; }
+
+body.landing-page .faq-list{
+  display:grid;
+  gap:10px;
+}
+body.landing-page .faq-item{
+  border:1px solid rgba(31,143,133,.22);
+  border-radius:12px;
+  padding:8px 12px;
+  background:#ffffffe8;
+}
+:root[data-theme="dark"] body.landing-page .faq-item{ background:#122229db; }
+body.landing-page .faq-item summary{
+  cursor:pointer;
+  font-weight:700;
+  padding:6px 0;
+}
+body.landing-page .faq-item p{
+  margin:8px 0 4px;
+  color:#48645f;
+  font-size:.92rem;
+}
+:root[data-theme="dark"] body.landing-page .faq-item p{ color:#aec8c2; }
+
+@keyframes fadePanel{
+  from{ opacity:.0; transform:translateY(6px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+@media (max-width: 900px){
+  body.landing-page .hero-metrics{ grid-template-columns:1fr; }
+  body.landing-page .calc-grid{ grid-template-columns:1fr; }
+  body.landing-page .timeline-grid{ grid-template-columns:1fr; }
 }
 
 /* --- AUTH PAGES --- */
