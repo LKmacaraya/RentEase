@@ -105,7 +105,7 @@ h2{margin:0 0 12px 0; font-size:20px; font-weight:700; letter-spacing:.2px}
   background:linear-gradient(180deg, #ffffff, #fbfdff);
 }
 
-/* layout */
+
 .two-col{ display:grid; grid-template-columns: 2fr 1fr; gap:16px; align-items:start }
 .main-col{ display:grid; gap:16px }
 .side-col{ position:static }
@@ -120,7 +120,7 @@ h2{margin:0 0 12px 0; font-size:20px; font-weight:700; letter-spacing:.2px}
 .btn-ghost{background:var(--primary-ghost); color:var(--text); border:1px solid rgba(135,170,194,.28)}
 .btn-danger{background:var(--danger); color:#fff}
 
-/* utilities */
+
 .btn-subtle{ font-size:14px; font-weight:600 }
 
 label{display:grid; gap:4px; font-size:14px; color:var(--muted)}
