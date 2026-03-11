@@ -33,7 +33,7 @@
               <input name="email" type="email" required placeholder="you@example.com" />
             </label>
             <label>Password
-              <input name="password" type="password" required placeholder="Create a password" />
+              <input id="regPassword" name="password" type="password" required placeholder="Create a password" autocomplete="new-password" />
             </label>
             <button class="btn btn-primary btn-block" type="submit">Create Account</button>
             <a class="btn btn-ghost btn-block mb-8" href="./index.html">Already have an account? Login</a>
@@ -65,6 +65,30 @@
         <div class="modal-actions">
           <button id="notifyOk" class="btn btn-primary">OK</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Password Strength Modal -->
+    <div id="pwdModal" class="modal hidden password-modal" role="dialog" aria-modal="false" aria-live="polite">
+      <div class="modal-content password-modal-content">
+        <div class="pwd-head">
+          <div>
+            <div class="pwd-title">Password strength</div>
+            <div class="pwd-sub">Improve your password as you type</div>
+          </div>
+          <button type="button" id="pwdClose" class="icon-btn pwd-close" aria-label="Close password check">✕</button>
+        </div>
+        <div class="pwd-meter" aria-hidden="true">
+          <div id="pwdMeterFill" class="pwd-meter-fill"></div>
+        </div>
+        <div id="pwdStrengthLabel" class="pwd-strength-label">Start typing to check strength.</div>
+        <ul class="pwd-rules">
+          <li data-rule="length">At least 8 characters</li>
+          <li data-rule="lower">Lowercase letter</li>
+          <li data-rule="upper">Uppercase letter</li>
+          <li data-rule="number">Number</li>
+          <li data-rule="symbol">Symbol</li>
+        </ul>
       </div>
     </div>
   </div>

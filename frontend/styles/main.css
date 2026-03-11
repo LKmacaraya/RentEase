@@ -196,6 +196,96 @@ textarea{min-height:90px}
 .modal-actions{ display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px }
 .modal-actions .btn{ flex:1 1 140px; min-width:140px }
 
+.password-modal{
+  background:transparent;
+  align-items:flex-start;
+  justify-content:flex-end;
+  padding:120px 24px 24px;
+  pointer-events:none;
+}
+.password-modal .password-modal-content{
+  max-width:420px;
+  width:100%;
+  pointer-events:auto;
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0)), var(--card);
+  box-shadow:0 18px 36px rgba(0,0,0,.35);
+}
+.pwd-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+.pwd-title{ font-weight:700; letter-spacing:.2px; }
+.pwd-sub{ color:var(--muted); font-size:12px; margin-top:4px; }
+.pwd-close{ height:36px; width:36px; border-left:none; border-radius:10px; }
+.pwd-meter{
+  height:8px;
+  border-radius:999px;
+  background:rgba(148,163,184,.2);
+  border:1px solid rgba(148,163,184,.25);
+  overflow:hidden;
+  margin-bottom:10px;
+}
+.pwd-meter-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, #ef4444, #f59e0b);
+  transition:width .18s ease, background .18s ease;
+}
+.pwd-strength-label{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:10px;
+  font-weight:600;
+}
+.pwd-strength-label.weak{ color:#f87171; }
+.pwd-strength-label.medium{ color:#fbbf24; }
+.pwd-strength-label.strong{ color:#34d399; }
+.pwd-rules{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  gap:8px;
+  font-size:13px;
+  color:var(--muted);
+}
+.pwd-rules li{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 8px;
+  border-radius:10px;
+  border:1px solid rgba(148,163,184,.18);
+  background:rgba(15,23,42,.2);
+}
+.pwd-rules li::before{
+  content:"•";
+  color:rgba(148,163,184,.7);
+  font-size:16px;
+  line-height:1;
+}
+.pwd-rules li.is-met{
+  color:#a7f3d0;
+  border-color:rgba(52,211,153,.35);
+  background:rgba(52,211,153,.12);
+}
+.pwd-rules li.is-met::before{
+  content:"✓";
+  color:#34d399;
+  font-weight:700;
+}
+@media (max-width: 680px){
+  .password-modal{
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+}
+
 .map{ width:100%; height:260px; border-radius:12px; border:1px solid var(--border); margin:12px 0; overflow:hidden }
 .map-label{ display:block; color:var(--muted); font-size:14px; margin-top:6px }
 .map-search{ display:flex; gap:8px; margin:8px 0 }
