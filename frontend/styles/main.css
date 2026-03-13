@@ -2,6 +2,7 @@
 
 .hero-actions .btn-primary{ animation: glowPulse 3.6s ease-in-out infinite }
 
+/* Shared motion primitives used across the marketing pages. */
 @keyframes heroPan{
   0%{ background-position: 0% 50% }
   50%{ background-position: 100% 50% }
@@ -14,6 +15,7 @@
   100%{ box-shadow: 0 0 0 rgba(124,156,255,0.0); transform: translateY(0) }
 }
 :root{
+  /* Default dashboard palette; page-specific overrides appear further down. */
   --bg:#07141e;
   --card:#101e2d;
   --surface:#112333;
@@ -45,6 +47,7 @@
 html,body{height:100%}
 body{
   margin:0;
+  /* Layered gradients keep the shell from reading as a flat admin template. */
   background:
     radial-gradient(1200px 600px at 80% -10%, #14334b 0, transparent 60%),
     radial-gradient(900px 420px at 8% 110%, #0a2a3d 0, transparent 62%),
@@ -93,6 +96,7 @@ h2{margin:0 0 12px 0; font-size:20px; font-weight:700; letter-spacing:.2px}
 .status-badge.down{color:#ef4444; border-color:rgba(239,68,68,.3); background:rgba(239,68,68,.08)}
 
 .card{
+  /* Base surface style reused by dashboards, auth shells, and landing sections. */
   background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
   border:1px solid var(--border);
   border-radius:18px;
@@ -197,6 +201,7 @@ textarea{min-height:90px}
 .modal-actions .btn{ flex:1 1 140px; min-width:140px }
 
 .password-modal{
+  /* Positioned like a flyout so password guidance stays near the trigger instead of centering. */
   background:transparent;
   align-items:flex-start;
   justify-content:flex-end;
@@ -292,6 +297,7 @@ textarea{min-height:90px}
 .map-search input{ flex:1; background:var(--surface); color:var(--text); border:1px solid var(--border); border-radius:10px; padding:8px 10px }
 
 .chat-list{
+  /* Scrolling is intentionally present but the scrollbar is hidden to match the glassy card treatment. */
   background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px;
   max-height:340px; overflow:auto; display:flex; flex-direction:column; gap:10px;
   -ms-overflow-style:none; scrollbar-width:none
@@ -399,7 +405,7 @@ body.admin-page .status-badge{
   .topbar{ position:static; padding:8px 10px; }
 }
 
-/* --- LANDING PAGE --- */
+/* Legacy landing page styles kept for shared sections that still reference these selectors. */
 .hero{ display:grid; grid-template-columns: 1.2fr 1fr; gap:16px; align-items:stretch }
 .hero-body{ display:flex; flex-direction:column; justify-content:center; gap:14px }
 .hero-title{ font-size:32px; font-weight:800; letter-spacing:.3px }
@@ -442,7 +448,7 @@ body.admin-page .status-badge{
 .gallery-track:hover{ animation-play-state: paused }
 @keyframes scrollX{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
 
-/* --- LANDING PAGE V2 --- */
+/* Main landing page theme with its own palette, typography, and responsive layout rules. */
 body.landing-page{
   --landing-bg:#f8f5ee;
   --landing-ink:#1b2d2a;
@@ -868,7 +874,7 @@ body.landing-page .faq-item p{
   body.landing-page .timeline-grid{ grid-template-columns:1fr; }
 }
 
-/* --- AUTH PAGES --- */
+/* Auth-specific shell that swaps the app chrome for a more focused entry flow. */
 body.auth-page{
   background:
     radial-gradient(920px 480px at 0% -15%, rgba(33,150,243,.20), transparent 64%),

@@ -15,6 +15,7 @@
     tabs.forEach((tab)=>{
       tab.addEventListener('click', ()=>{
         const key = tab.getAttribute('data-persona-tab');
+        // Keep the tab button state and the matching content panel in sync from the same key.
         tabs.forEach((item)=>{
           const active = item === tab;
           item.classList.toggle('active', active);
@@ -46,6 +47,7 @@
         const readEl = reads[key];
         if(readEl) readEl.textContent = formatCurrency(value);
       });
+      // The UI shows both per-field values and the combined monthly estimate from the same pass.
       totalEl.textContent = formatCurrency(total);
     };
 
@@ -72,6 +74,7 @@
       requestAnimationFrame(step);
     };
 
+    // Counters animate once on first view so they do not restart every time the user scrolls.
     const observer = new IntersectionObserver((entries, obs)=>{
       entries.forEach((entry)=>{
         if(!entry.isIntersecting) return;
@@ -86,6 +89,7 @@
   function initTimelineReveal(){
     const steps = Array.from(document.querySelectorAll('[data-step]'));
     if(!steps.length) return;
+    // Reuse intersection observers for scroll-in motion instead of binding manual scroll handlers.
     const observer = new IntersectionObserver((entries)=>{
       entries.forEach((entry)=>{
         if(entry.isIntersecting){
@@ -101,6 +105,7 @@
     if(!items.length) return;
     items.forEach((item)=>{
       item.addEventListener('toggle', ()=>{
+        // Behave like an accordion: opening one answer closes the others.
         if(!item.open) return;
         items.forEach((other)=>{
           if(other !== item) other.open = false;
@@ -110,6 +115,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', ()=>{
+    // Initialize only the modules that have matching markup on the current landing page variant.
     initPersonaTabs();
     initBudgetCalculator();
     initCounters();

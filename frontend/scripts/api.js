@@ -1,5 +1,6 @@
 (function(){
   const K='RE_session';
+  // Keep auth state shape in one place so every request can reuse the same token source.
   function session(){ try{ return JSON.parse(localStorage.getItem(K)); }catch{ return null; } }
   function setSession(v){ localStorage.setItem(K, JSON.stringify(v)); }
   async function request(path,{method='GET',headers={},body}={}){
@@ -13,6 +14,7 @@
     const ct=res.headers.get('content-type')||'';
     return ct.includes('application/json')? res.json(): res.text();
   }
+  // Expose a small API client so page scripts do not need to duplicate fetch logic.
   window.API={
     session, setSession,
     login: (email,password)=>request('/api/auth/login',{method:'POST',body:{email,password}}),
@@ -23,6 +25,7 @@
     },
     listings:{
       list:(params={})=>{
+        // Only send filters that the user actually filled in, which keeps backend query parsing simple.
         const qs=new URLSearchParams();
         if(params.q) qs.set('q',params.q);
         if(params.minPrice!==undefined&&params.minPrice!=='') qs.set('minPrice',params.minPrice);
@@ -40,6 +43,7 @@
     chat:{
       public:{
         list:(afterId)=>{
+          // Incremental polling uses afterId to fetch only newer messages.
           const qs=afterId? ('?afterId='+encodeURIComponent(afterId)) : '';
           return request('/api/chat/public'+qs);
         },
@@ -50,6 +54,7 @@
       private:{
         threads:()=>request('/api/chat/private/threads'),
         list:(listingId,otherId,afterId)=>{
+          // Thread routes are keyed by listing and participant so the UI can scope conversations correctly.
           const qs=afterId? ('?afterId='+encodeURIComponent(afterId)) : '';
           return request('/api/chat/private/'+listingId+'/'+otherId+qs);
         },
