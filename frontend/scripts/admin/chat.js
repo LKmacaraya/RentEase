@@ -1,6 +1,12 @@
 import { DB, notify, readFileAsDataUrl } from "./core.js";
 
-const STICKERS = ["👍", "😊", "❤️", "😢", "😮"];
+const STICKERS = [
+  "\uD83D\uDC4D",
+  "\uD83D\uDE0A",
+  "\u2764\uFE0F",
+  "\uD83D\uDE22",
+  "\uD83D\uDE2E",
+];
 
 function renderMessageContent(message) {
   if (message.deleted_at) {
@@ -53,7 +59,7 @@ function renderBubble(message, { onEdit, onDelete }) {
   meta.className = "msg-meta";
   meta.textContent =
     (message.sender_name || "User " + message.sender_id) +
-    (message.edited_at ? " • edited" : "");
+    (message.edited_at ? " \u2022 edited" : "");
   bubble.appendChild(meta);
 
   const actions = document.createElement("div");

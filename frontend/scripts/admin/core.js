@@ -17,7 +17,7 @@ export const DB = {
 
 export function money(value) {
   const amount = Number(value);
-  return Number.isNaN(amount) ? value : "₱" + amount.toLocaleString();
+  return Number.isNaN(amount) ? value : "\u20B1" + amount.toLocaleString();
 }
 
 export function placeholderImg(text = "No Photo") {

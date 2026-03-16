@@ -96,9 +96,9 @@ export function initListings({ maps }) {
 
       const meta = document.createElement("div");
       meta.className = "meta";
-      meta.textContent = `${money(item.price)} / mo • ${item.beds ?? 0} BR • ${
+      meta.textContent = `${money(item.price)} / mo \u2022 ${item.beds ?? 0} BR \u2022 ${
         item.baths ?? 0
-      } BA • ${item.city || "Unknown"}`;
+      } BA \u2022 ${item.city || "Unknown"}`;
       body.appendChild(meta);
 
       if (item.description) {

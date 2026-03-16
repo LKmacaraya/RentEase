@@ -1,7 +1,7 @@
 const DB={kSession:"RE_session",session(){try{return JSON.parse(localStorage.getItem(this.kSession));}catch{return null;}},setSession(v){localStorage.setItem(this.kSession,JSON.stringify(v));},guard(){const s=this.session();if(!s||s.role!=="user"){window.location.href="../index.html";}}};
 DB.guard();
 
-function money(v){const n=Number(v);return Number.isNaN(n)?v:"₱"+n.toLocaleString();}
+function money(v){const n=Number(v);return Number.isNaN(n)?v:"\u20B1"+n.toLocaleString();}
 function placeholderImg(t="No Photo"){return"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><rect width='100%' height='100%' fill='#111827'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#6b7280' font-size='12'>${t}</text></svg>`);} 
 
 async function loadListings(params={}){
@@ -23,7 +23,7 @@ function render(list){
     const img=document.createElement("img");img.className="thumb";const photo=(Array.isArray(it.images)&&it.images[0])||"";img.src=photo||placeholderImg();img.onerror=()=>img.src=placeholderImg();img.onclick=()=>openView(it);card.appendChild(img);
     const body=document.createElement("div");
     const top=document.createElement("div");const title=document.createElement("div");title.className="title";title.textContent=it.title;top.appendChild(title);body.appendChild(top);
-    const meta=document.createElement("div");meta.className="meta";const status=(it.status||'available');meta.textContent=`${money(it.price)} / mo • ${it.beds??0} BR • ${it.baths??0} BA • ${it.city||"Unknown"}`;body.appendChild(meta);
+    const meta=document.createElement("div");meta.className="meta";const status=(it.status||'available');meta.textContent=`${money(it.price)} / mo \u2022 ${it.beds??0} BR \u2022 ${it.baths??0} BA \u2022 ${it.city||"Unknown"}`;body.appendChild(meta);
     const pill=document.createElement("span");pill.className=`badge pill ${status}`;pill.textContent=status==='rented'? 'Rented':'Available';card.appendChild(pill);
     if(it.description){const d=document.createElement("div");d.textContent=it.description;body.appendChild(d);} 
     const act=document.createElement("div");act.className="actions-inline";
@@ -116,7 +116,7 @@ const pubList=document.getElementById('pubChatList');
 const pubInput=document.getElementById('pubChatInput');
 const pubSend=document.getElementById('pubChatSend');
 let pubAfterId=0;let pubTimer=null;
-const stickers=['👍','😊','❤️','😢','😮'];
+const stickers=['\uD83D\uDC4D','\uD83D\uDE0A','\u2764\uFE0F','\uD83D\uDE22','\uD83D\uDE2E'];
 // augment input row with buttons and sticker picker
 const inputRow=pubSend?.parentElement; let fileBtn=null, fileInp=null, stkBtn=null, stkPicker=null; let stkOpen=false;
 if(inputRow){
@@ -156,7 +156,7 @@ function renderBubble(m){
     }else{ const t=document.createElement('div'); t.className='msg-text'; t.style.fontSize='24px'; t.textContent=m.content; bubble.appendChild(t); }
   }
   else { const t=document.createElement('div'); t.className='msg-text'; t.textContent=m.content; bubble.appendChild(t); }
-  const meta=document.createElement('div'); meta.className='msg-meta'; meta.textContent=(m.sender_name||('User '+m.sender_id))+(m.edited_at?' • edited':''); bubble.appendChild(meta);
+  const meta=document.createElement('div'); meta.className='msg-meta'; meta.textContent=(m.sender_name||('User '+m.sender_id))+(m.edited_at?' \u2022 edited':''); bubble.appendChild(meta);
   const actions=document.createElement('div'); actions.className='msg-actions';
   if(isMe){
     const btnE=document.createElement('button'); btnE.className='btn-icon'; btnE.textContent='Edit'; btnE.onclick=async()=>{ const v=prompt('Edit message', m.content||''); if(v==null) return; if(!v.trim()) return; try{ await window.API.chat.public.update(m.id, v.trim()); pubAfterId=0; pubList.innerHTML=''; }catch{ notify('Failed to edit'); } };
@@ -183,7 +183,7 @@ function renderPrivBubble(m){
   const bubble=document.createElement('div'); bubble.className='msg-bubble';
   if(m.deleted_at){ const t=document.createElement('div'); t.className='msg-text'; t.textContent='(message deleted)'; bubble.appendChild(t); }
   else { const t=document.createElement('div'); t.className='msg-text'; t.textContent=m.content||''; bubble.appendChild(t); }
-  const meta=document.createElement('div'); meta.className='msg-meta'; meta.textContent=(m.sender_name||('User '+m.sender_id))+(m.edited_at?' • edited':''); bubble.appendChild(meta);
+  const meta=document.createElement('div'); meta.className='msg-meta'; meta.textContent=(m.sender_name||('User '+m.sender_id))+(m.edited_at?' \u2022 edited':''); bubble.appendChild(meta);
   const actions=document.createElement('div'); actions.className='msg-actions';
   if(isMe){
     const btnE=document.createElement('button'); btnE.className='btn-icon'; btnE.textContent='Edit'; btnE.onclick=async()=>{ const v=prompt('Edit message', m.content||''); if(v==null) return; if(!v.trim()) return; try{ await window.API.chat.private.update(m.id, v.trim()); privAfterId=0; privList.innerHTML=''; }catch{ notify('Failed to edit'); } };
@@ -211,7 +211,7 @@ function openView(it){
   if(!vModal) return;
   vTitle.textContent=it.title||'Listing Details';
   const photo=(Array.isArray(it.images)&&it.images[0])||''; vPhoto.src=photo||placeholderImg();
-  vMeta.textContent=`${money(it.price)} / mo • ${it.beds??0} BR • ${it.baths??0} BA • ${it.city||'Unknown'}`;
+  vMeta.textContent=`${money(it.price)} / mo \u2022 ${it.beds??0} BR \u2022 ${it.baths??0} BA \u2022 ${it.city||'Unknown'}`;
   vDesc.textContent=it.description||'';
   vAddr.textContent=it.address? (`Address: ${it.address}`) : '';
   vLinks.innerHTML='';
